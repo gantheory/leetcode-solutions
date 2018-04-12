@@ -8,39 +8,36 @@
  */
 class Solution {
  public:
-  void sort(ListNode* now, int size) {
-    if (size <= 1) return;
+  ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
+    ListNode dummy(0);
+    ListNode* now = &dummy;
+    while (l1 and l2) {
+      if (l1->val > l2->val) swap(l1, l2);
+      now->next = l1;
+      l1 = l1->next, now = now->next;
+    }
+    now->next = l1 ? l1 : l2;
+    return dummy.next;
+  }
+  ListNode* sort(ListNode* now, int size) {
+    if (size == 0) return NULL;
+    if (size == 1) return now;
 
     ListNode* nxt = now;
-    for (int i = 0; i < size / 2; ++i) nxt = nxt->next;
+    ListNode* prv;
+    for (int i = 0; i < size / 2; ++i) prv = nxt, nxt = nxt->next;
+    prv->next = NULL;
 
-    sort(now, size / 2);
-    sort(nxt, size - size / 2);
+    now = sort(now, size / 2);
+    nxt = sort(nxt, size - size / 2);
 
-    ListNode* head = now;
-    vector<int> result;
-    int i = 0, n = size / 2, j = 0, m = size - size / 2;
-    while (i < n and j < m) {
-      if (now->val < nxt->val) {
-        result.push_back(now->val);
-        ++i, now = now->next;
-      } else {
-        result.push_back(nxt->val);
-        ++j, nxt = nxt->next;
-      }
-    }
-    while (i < n) result.push_back(now->val), ++i, now = now->next;
-    while (j < m) result.push_back(nxt->val), ++j, nxt = nxt->next;
-    for (int i = 0; i < (int)result.size(); ++i) {
-      head->val = result[i];
-      head = head->next;
-    }
+    return mergeTwoLists(now, nxt);
   }
   ListNode* sortList(ListNode* head) {
     int size = 0;
     ListNode* tmp = head;
     while (tmp != NULL) ++size, tmp = tmp->next;
-    sort(head, size);
+    head = sort(head, size);
     return head;
   }
 };

@@ -1,21 +1,22 @@
 class MinStack {
  public:
-  map<int, int> mp;
-  stack<int> st;
+  stack<int> st1, st2;
   /** initialize your data structure here. */
   MinStack() {}
 
-  void push(int x) { ++mp[x], st.push(x); }
-
-  void pop() {
-    --mp[st.top()];
-    if (mp[st.top()] == 0) mp.erase(st.top());
-    st.pop();
+  void push(int x) {
+    st1.push(x);
+    if (st2.empty() or st1.top() <= st2.top()) st2.push(x);
   }
 
-  int top() { return st.top(); }
+  void pop() {
+    if (st1.top() == st2.top()) st2.pop();
+    st1.pop();
+  }
 
-  int getMin() { return mp.begin()->first; }
+  int top() { return st1.top(); }
+
+  int getMin() { return st2.top(); }
 };
 
 /**

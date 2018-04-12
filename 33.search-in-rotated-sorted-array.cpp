@@ -15,20 +15,19 @@ class Solution {
     }
   }
   int search(vector<int>& nums, int target) {
-    // search rotating point
     int rotatingPoint = findPoint(nums);
     if (rotatingPoint == -1) return -1;
 
     int l = 0, r = nums.size() - 1;
     while (l <= r) {
       int mid = (l + r) >> 1;
-      int nowMid = (mid + rotatingPoint) % nums.size();
-      if (nums[nowMid] < target)
+      int value = nums[(mid + rotatingPoint) % nums.size()];
+      if (value < target)
         l = mid + 1;
-      else if (nums[nowMid] > target)
+      else if (value > target)
         r = mid - 1;
       else
-        return nowMid;
+        return (mid + rotatingPoint) % nums.size();
     }
     return -1;
   }
