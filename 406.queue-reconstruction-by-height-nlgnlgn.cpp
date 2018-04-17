@@ -95,6 +95,7 @@ class Solution {
       erase.push_back(idx);
       if (i < n and height != people[i + 1].first) {
         for (auto &x : erase) st.Update(x, 0);
+        erase.clear();
       }
     }
     return ans;
